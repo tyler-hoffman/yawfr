@@ -33,8 +33,13 @@ define(function() {
     }
   };
 
+  ShaderCompiler.prototype.bindUniform2f = function(gl, program, name, x, y) {
+    var location = gl.getUniformLocation(program, name);
+    gl.uniform2f(location, x, y);
+  };
+
   ShaderCompiler.prototype.bindRect = function(gl, program, name, xMin, xMax, yMin, yMax) {
-    
+
     var positionLocation = gl.getAttribLocation(program, name);
 
     // Create a buffer and put a single clipspace rectangle in

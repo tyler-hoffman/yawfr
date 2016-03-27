@@ -1,5 +1,6 @@
 precision mediump float;
 
+uniform vec2 a_coords;
 varying vec2 v_texCoord;
 
 vec2 e = vec2(2.7182818, 0.0);
@@ -19,17 +20,22 @@ vec2 toPower(vec2 v, int power) {
 
 void main() {
   int max = 50;
-  int count = max;
-  vec2 current = v_texCoord;
-  vec2 next = vec2(0, 0);
-  vec2 c = vec2(0.45, 0.1428);
+  int count = 0;
+  vec2 z = v_texCoord;
+  //vec2 c = vec2(-0.621, 0.0);
+  //vec2 c = z;
+  vec2 c = a_coords;
 
   for(int i = 0; i < 50; i++) {
 
-    current = toPower(current, 2);
-    current += c;
+    z = toPower(z, 2);
+    z = multiply(
+        vec2(exp(z.x), 0.0),
+        vec2(cos(z.y), sin(z.y)));
 
-    if (length(current) > 2.0) {
+    z += c;
+
+    if (length(z) > 2.0) {
       count = i;
       break;
     }

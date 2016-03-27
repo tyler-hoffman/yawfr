@@ -9,8 +9,8 @@ define([
       var gl = canvas.getContext('webgl'),
           compiler = new ShaderCompiler(),
           program = compiler.compileProgram(gl, vertextShader, fragmentShader),
-          x = 0.0,
-          y = 0.0,
+          x = 0,
+          y = 0,
           m = 2.0,
           scrollSpeed =  0.004;;
 
@@ -20,6 +20,7 @@ define([
       // look up where the vertex data needs to go.
       var ratio = 13 / 8;
       compiler.bindRect(gl, program, 'a_position', -1.0, 1.0, -ratio, ratio);
+      compiler.bindUniform2f(gl, program, 'a_coords', 0.4, 0);
 
       // draw
       var redraw = function() {
@@ -40,6 +41,13 @@ define([
 
         redraw();
         e.preventDefault();
+      });
+
+      canvas.addEventListener('mousemove', function(e) {
+        var x = (e.clientX / e.target.width * 2 - 1),
+            y = (e.clientY / e.target.height * 2 - 1);
+        compiler.bindUniform2f(gl, program, 'a_coords', x, y);
+        redraw();
       });
 
     };
