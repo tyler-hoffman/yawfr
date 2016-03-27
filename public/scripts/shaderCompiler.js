@@ -31,7 +31,29 @@ define(function() {
       console.log(gl.getShaderInfoLog(shader));
       return null;
     }
-  }
+  };
+
+  ShaderCompiler.prototype.bindRect = function(gl, program, name, xMin, xMax, yMin, yMax) {
+    
+    var positionLocation = gl.getAttribLocation(program, name);
+
+    // Create a buffer and put a single clipspace rectangle in
+    // it (2 triangles)
+    var buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+            xMin, yMin,
+            xMax, yMin,
+            xMin, yMax,
+            xMin, yMax,
+            xMax, yMin,
+            xMax, yMax]),
+        gl.STATIC_DRAW);
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+  };
 
   return ShaderCompiler;
 
