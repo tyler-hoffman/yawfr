@@ -1,0 +1,39 @@
+precision mediump float;
+
+varying vec2 v_texCoord;
+
+vec2 e = vec2(2.7182818, 0.0);
+
+vec2 multiply(vec2 a, vec2 b) {
+  return vec2(a.x * b.x - a.y * b.y, a.x * b.y + a.y * b.x);
+}
+
+vec2 toPower(vec2 v, int power) {
+  vec2 result = vec2(1.0, 0.0);
+  for (int i = 0; i < 20; i++) {
+    if (i == power) break;
+    result = multiply(result, v);
+  }
+  return result;
+}
+
+void main() {
+  int max = 50;
+  int count = max;
+  vec2 current = v_texCoord;
+  vec2 next = vec2(0, 0);
+  vec2 c = vec2(0.45, 0.1428);
+
+  for(int i = 0; i < 50; i++) {
+
+    current = toPower(current, 2);
+    current += c;
+
+    if (length(current) > 2.0) {
+      count = i;
+      break;
+    }
+
+  }
+  gl_FragColor = vec4(float(count) / float(max), 0.0, 0.0, 1.0);
+}
